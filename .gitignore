@@ -1,0 +1,23 @@
+# Local Overleaf sources; keep outside version control.
+/submission/
+
+# Local secrets and Python environments
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Downloaded corpora, indexes, model caches and generated runs
+/data/
+/artifacts/
+/runs/
+/models/
+
+# Operating system files
+.DS_Store
+Thumbs.db
