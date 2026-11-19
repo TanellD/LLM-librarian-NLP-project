@@ -16,7 +16,8 @@ The research plan is ready. Code, dependencies, datasets, and experimental resul
 
 - [Hypotheses and evaluation protocol](docs/hypothesis.md).
 - [Project plan, grading criteria, and report structure](docs/project-plan.md).
-- [Starting points for Related Work](docs/related-work.md).
+- [RAG retrieval review: related research, time, resources, and cost](docs/related-work.md).
+- [Source search methods and verification log](docs/source-search-log.md).
 
 ## Local checkout
 
