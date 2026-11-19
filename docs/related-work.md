@@ -1,13 +1,13 @@
-# Related Work: отправная точка
+# Related Work: starting points
 
-Это начальный список первичных источников, а не законченный обзор на 10 баллов. В финальном обзоре нужны результаты конкурентных методов, их метрики и условия сравнения. Непроверенные численные результаты здесь не приводятся.
+This is an initial list of primary sources rather than a completed review for the 10-point component. The final review needs competing methods' results, metrics, and evaluation conditions. No unverified numerical results are included here.
 
-| Источник | Связь с проектом | Что учесть в сравнении |
+| Source | Relevance to the project | Comparison considerations |
 | --- | --- | --- |
-| Sarthi et al., 2024. [RAPTOR: Recursive Abstractive Processing for Tree-Organized Retrieval](https://arxiv.org/abs/2401.18059) | Рекурсивная кластеризация и суммаризация фрагментов; ближайший ориентир для организации знаний | Отличить плоские кластеры с названиями от дерева суммаризаций; сопоставить качество и стоимость построения индекса |
-| Thakur et al., 2021. [BEIR: A Heterogenous Benchmark for Zero-shot Evaluation of Information Retrieval Models](https://arxiv.org/abs/2104.08663) | Оценка retrieval на разнородных задачах; обоснование лексического baseline | Разделять качество поиска и генерации; фиксировать корпус, разметку релевантности и бюджет |
-| Yang et al., 2018. [HotpotQA: A Dataset for Diverse, Explainable Multi-hop Question Answering](https://aclanthology.org/D18-1259/) | Датасет с multi-hop вопросами и supporting facts; кандидат для измерения полноты доказательств | Не смешивать distractor, fullwiki и собственный ограниченный корпус |
+| Sarthi et al., 2024. [RAPTOR: Recursive Abstractive Processing for Tree-Organized Retrieval](https://arxiv.org/abs/2401.18059) | Recursive clustering and summarization of chunks; the closest reference for knowledge organization | Distinguish flat named clusters from a tree of summaries; compare quality and index construction cost |
+| Thakur et al., 2021. [BEIR: A Heterogenous Benchmark for Zero-shot Evaluation of Information Retrieval Models](https://arxiv.org/abs/2104.08663) | Retrieval evaluation across heterogeneous tasks; motivation for a lexical baseline | Separate retrieval quality from generation quality; fix the corpus, relevance annotations, and budget |
+| Yang et al., 2018. [HotpotQA: A Dataset for Diverse, Explainable Multi-hop Question Answering](https://aclanthology.org/D18-1259/) | A dataset with multi-hop questions and supporting facts; a candidate for measuring evidence coverage | Keep distractor, fullwiki, and a derived restricted corpus distinct |
 
-Официальные данные и оценивание HotpotQA: <https://hotpotqa.github.io/>. На сайте указана лицензия CC BY-SA 4.0.
+Official HotpotQA data and evaluation: <https://hotpotqa.github.io/>. The website specifies a CC BY-SA 4.0 license.
 
-Перед финальными экспериментами расширить обзор: исходный RAG, BM25, dense retrieval, hybrid fusion и более свежие методы иерархического поиска. Для каждого выбрать первичную публикацию и записать задачу, корпус/split, генератор, метрики, опубликованные результаты и ограничения. Обзор не является исчерпывающим или проверкой актуального SotA.
+Before final experiments, expand the review to cover the original RAG approach, BM25, dense retrieval, hybrid fusion, and more recent hierarchical retrieval methods. For each, select a primary publication and record the task, corpus/split, generator, metrics, published results, and limitations. This review is neither exhaustive nor a verification of current SotA.

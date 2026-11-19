@@ -1,72 +1,72 @@
-# Исследовательская гипотеза
+# Research hypotheses
 
-## Тема и задача
+## Topic and task
 
-**LLM-библиотекарь: автоматическая организация документов для повышения эффективности RAG.**
+**LLM Librarian: automatic document organization for more effective RAG.**
 
-Вход: корпус документов и пользовательский вопрос. Выход: ответ и ссылки на исходные фрагменты, подтверждающие его. Предлагается автоматически разбить документы на смысловые блоки, сгруппировать блоки по эмбеддингам и с помощью LLM присвоить группам короткие описательные названия. Поиск сначала выбирает группы, затем исходные блоки внутри них.
+Input: a document corpus and a user question. Output: an answer with references to the original supporting passages. The proposed approach automatically splits documents into semantic chunks, groups chunks using embeddings, and uses an LLM to assign short descriptive names to the groups. Retrieval first selects groups, then retrieves original chunks within them.
 
-Исследуется компонент поиска в RAG. Агентный цикл с инструментами можно добавить позже: он не требуется для проверки основной гипотезы и усложняет контроль условий.
+The study focuses on the retrieval component of RAG. An agent loop with tools can be added later; it is unnecessary for testing the main hypotheses and would introduce additional experimental variables.
 
-## Проверяемые утверждения
+## Testable claims
 
-**H1 — качество.** При одинаковых корпусе, модели эмбеддингов, генераторе ответов и лимите контекста двухступенчатый поиск по смысловым кластерам с LLM-названиями повышает Answer F1 по сравнению с лучшим из двух базовых методов: dense RAG и гибридного BM25 + dense RAG. Базовый метод выбирается по validation до итогового тестирования.
+**H1 — Quality.** With the same corpus, embedding model, answer generator, and context budget, two-stage retrieval over semantic clusters with LLM-generated names improves Answer F1 over the stronger of two baselines: dense RAG and hybrid BM25 + dense RAG. The baseline is selected on validation data before final testing.
 
-**H2 — эффективность.** При допустимом снижении Answer F1 не более чем на 1 процентный пункт кластерный поиск снижает медианную задержку retrieval не менее чем на 20% относительно того же базового метода. Дополнительно проверяется полная задержка ответа: ускорение retrieval само по себе не означает ускорение генерации.
+**H2 — Efficiency.** Allowing an Answer F1 reduction of at most 1 percentage point, cluster-based retrieval reduces median retrieval latency by at least 20% relative to the same baseline. End-to-end answer latency is evaluated separately: faster retrieval alone does not imply faster generation.
 
-**H3 — вклад названий.** Названия кластеров дают дополнительное улучшение по сравнению с теми же кластерами, маршрутизируемыми только по центроидам. Если разницы нет, полезность LLM-названий для поиска не подтверждается, даже если они удобны человеку.
+**H3 — Contribution of names.** Cluster names provide an additional improvement over the same clusters routed using centroids alone. If there is no difference, the retrieval benefit of LLM-generated names is unsupported, even if the names are useful to human readers.
 
-Предлагаемый практический порог для H1: прирост Answer F1 не менее 2 процентных пунктов на шкале 0–100 и 95% парный bootstrap-интервал разности выше нуля. H2 принимается, если 95% интервал разности F1 целиком выше −1 п.п., а интервал отношения медианных задержек целиком ниже 0,8. Для H3 фиксируется направленная разность F1 и её интервал; при проверке всех трёх гипотез учитывается множественность сравнений. Эти пороги являются проектными решениями, а не известными свойствами метода; их нужно зафиксировать до итогового теста.
+The proposed practical threshold for H1 is an Answer F1 gain of at least 2 percentage points on the 0–100 scale, with a paired 95% bootstrap confidence interval for the difference entirely above zero. H2 is supported if the 95% confidence interval for the F1 difference is entirely above −1 percentage point and the interval for the ratio of median latencies is entirely below 0.8. For H3, record the directional F1 difference and its interval; account for multiple comparisons when testing all three hypotheses. These thresholds are project decisions rather than established properties of the method and must be fixed before the final test.
 
-Отсутствие улучшения или выигрыш только при дорогой индексации — полноценные результаты. H1 и H2 оцениваются отдельно: исходная идея «быстрее и точнее» подтверждается только при выполнении обеих.
+No improvement, or an improvement requiring expensive indexing, is a valid research outcome. H1 and H2 are evaluated separately: the original claim of being “faster and more accurate” is supported only if both hold.
 
-## Предлагаемый метод
+## Proposed method
 
-1. Очистить документы, сохранить идентификаторы источников, заголовки и границы предложений.
-2. Разбить текст по смысловым границам с ограничениями минимальной и максимальной длины. Сохранить связь блока с исходными предложениями.
-3. Получить эмбеддинги и построить плоские кластеры. Алгоритм, число кластеров или правило его выбора настроить на validation.
-4. Передать LLM репрезентативные блоки каждого кластера и получить короткое название по единому промпту. Сохранить модель, промпт и стоимость. Название является метаданными, а не источником доказательств.
-5. Представить кластер центроидом и отдельно эмбеддингом его названия. Ранжировать кластеры по взвешенной сумме сходств с вопросом; вес и число выбираемых кластеров определить на validation.
-6. Ранжировать исходные блоки выбранных кластеров по сходству с вопросом и собрать контекст в общем лимите токенов.
-7. Сгенерировать ответ с указанием источников тем же генератором и промптом, что у базовых методов.
+1. Clean documents while preserving source identifiers, headings, and sentence boundaries.
+2. Split text at semantic boundaries subject to minimum and maximum length constraints. Preserve mappings from chunks to source sentences.
+3. Compute embeddings and build flat clusters. Tune the algorithm, cluster count, or cluster selection rule on validation data.
+4. Give representative chunks from each cluster to an LLM and obtain a short name using a shared prompt. Record the model, prompt, and cost. A name is metadata rather than evidence.
+5. Represent each cluster by its centroid and, separately, the embedding of its name. Rank clusters using a weighted sum of their similarities to the question; select the weight and number of clusters on validation data.
+6. Rank original chunks within the selected clusters by similarity to the question and assemble the context within the shared token budget.
+7. Generate an answer with source references using the same generator and prompt as the baselines.
 
-Глобальный поиск как fallback допускается только отдельной конфигурацией с учётом его задержки. Иначе он может скрыть ошибки маршрутизации.
+A global retrieval fallback is allowed only as a separate configuration with its latency included. Otherwise, it could conceal routing errors.
 
-## Сравнения и абляции
+## Comparisons and ablations
 
-| Конфигурация | Что проверяется |
+| Configuration | Purpose |
 | --- | --- |
-| Фиксированные блоки + dense retrieval | Обычный RAG, исходная точка |
-| Те же блоки + BM25 | Лексический контроль |
-| Те же блоки + BM25/dense с fusion | Сильный гибридный baseline |
-| Смысловые блоки + глобальный dense retrieval | Вклад разбиения без кластеров |
-| Смысловые блоки + глобальный hybrid retrieval | Контроль кластеров относительно hybrid при одинаковом разбиении |
-| Смысловые блоки + центроиды кластеров | Вклад ограничения области поиска |
-| Те же кластеры + центроиды и LLM-названия | Полный метод; вклад названий |
-| RAPTOR-подобная организация с суммаризациями | Близкий опубликованный подход, если позволяет бюджет |
+| Fixed-size chunks + dense retrieval | Standard RAG baseline |
+| The same chunks + BM25 | Lexical control |
+| The same chunks + BM25/dense fusion | Strong hybrid baseline |
+| Semantic chunks + global dense retrieval | Contribution of chunking without clusters |
+| Semantic chunks + global hybrid retrieval | Control for clustering against hybrid retrieval with identical chunking |
+| Semantic chunks + cluster centroids | Contribution of restricting the search space |
+| The same clusters + centroids and LLM-generated names | Full method; contribution of names |
+| RAPTOR-style organization with summaries | Closely related published approach, if the budget permits |
 
-Для основных сравнений лимит контекста одинаков в токенах; дополнительно сообщается фактическое число блоков. Размеры блоков, top-k, бюджет кандидатов и правила fusion описываются явно. Для оценки скорости baseline должен использовать разумный ANN-индекс: сравнение только с полным перебором может создать искусственный выигрыш кластеризации.
+Use the same context token budget for the main comparisons and also report the actual number of chunks. Specify chunk sizes, top-k, candidate budgets, and fusion rules. For latency comparisons, baselines should use a reasonable approximate nearest neighbor (ANN) index: comparing only against exhaustive search could create an artificial advantage for clustering.
 
-## Данные и защита от утечек
+## Data and leakage prevention
 
-Кандидат для первого эксперимента — [HotpotQA](https://hotpotqa.github.io/): вопросы с ответами и размеченными supporting facts позволяют оценить и ответ, и найденные доказательства. Финальный выбор и объём ещё не утверждены.
+[HotpotQA](https://hotpotqa.github.io/) is a candidate for the first experiment: questions, answers, and annotated supporting facts allow evaluation of both answers and retrieved evidence. The final dataset and sample size have not been selected.
 
-Для небольшого пилота можно заранее собрать единый дедуплицированный корпус из контекстов выбранной подвыборки distractor. Все системы ищут по этому общему корпусу, а не по индивидуальному набору документов для каждого вопроса. Это **производный ограниченный эксперимент**, его результаты нельзя напрямую сравнивать с официальными fullwiki или distractor leaderboard.
+For a small pilot, construct a shared deduplicated corpus in advance from the contexts of a selected distractor subset. All systems search this shared corpus rather than a separate document set for each question. This is a **derived, restricted experiment** whose results cannot be compared directly with official fullwiki or distractor leaderboards.
 
-Использовать train для разработки, фиксированную часть официального dev для validation, другую непересекающуюся часть dev — как локальный held-out test. Такое разбиение не является официальным test. Опубликовать seed и списки ID, проверить дубликаты вопросов и отдельно сообщить пересечение документов. Документы тестовых вопросов могут входить в индекс как доступная база знаний; тестовые вопросы, ответы и supporting-fact labels не используются для построения кластеров, названий или настройки параметров.
+Use the training set for development, a fixed portion of the official development set for validation, and a disjoint portion of that development set as a local held-out test. This is not the official test split. Publish the seed and ID lists, check duplicate questions, and report document overlap separately. Documents associated with test questions may be indexed as available knowledge; test questions, answers, and supporting-fact labels must not be used to construct clusters or names or to tune parameters.
 
-До запуска зафиксировать источник, версию, лицензию, правила очистки и статистику корпуса. Официальный сайт распространяет HotpotQA под CC BY-SA 4.0; условия данных и производных артефактов нужно сохранить. Качество ответов оценивать официальной нормализацией EM/F1.
+Before running experiments, record the source, version, license, cleaning rules, and corpus statistics. The official website distributes HotpotQA under CC BY-SA 4.0; preserve the terms applicable to the data and derived artifacts. Evaluate answers using the official EM/F1 normalization.
 
-## Метрики и воспроизводимость
+## Metrics and reproducibility
 
-- **Основная метрика качества:** Answer F1; дополнительные — Exact Match, document Recall@k, nDCG@k и покрытие размеченных supporting facts в фактически переданном контексте.
-- **Скорость:** p50/p95 retrieval и полной генерации, отдельно с прогретым индексом; одинаковые оборудование, параллелизм, порядок вопросов и политика кеширования. Сетевые API-вызовы учитывать отдельно.
-- **Стоимость:** время и стоимость построения индекса, embedding/LLM tokens, запросы к API, память, размер индекса и стоимость одного вопроса. Полная стоимость для N вопросов: `C_index + N * C_query`; показать точку окупаемости, если она существует.
-- **Надёжность:** не менее трёх seed для стохастической кластеризации; повторные измерения задержек и парные интервалы по одним и тем же вопросам. Сохранять ответы, retrieved IDs, оценки и параметры каждого запуска.
-- **Анализ ошибок:** потери доказательств при маршрутизации, неточные названия, смешанные темы, точечные и многошаговые вопросы. Подтипы вопросов задать до просмотра итоговых результатов.
+- **Primary quality metric:** Answer F1; additional metrics include Exact Match, document Recall@k, nDCG@k, and coverage of annotated supporting facts in the context actually provided to the generator.
+- **Latency:** p50/p95 retrieval and end-to-end generation latency, measured separately with a warmed index; use identical hardware, concurrency, question order, and caching policy. Account for network API calls separately.
+- **Cost:** indexing time and cost, embedding/LLM tokens, API requests, memory, index size, and cost per question. Total cost for N questions is `C_index + N * C_query`; show the break-even point if one exists.
+- **Reliability:** at least three seeds for stochastic clustering; repeated latency measurements and paired confidence intervals over the same questions. Save answers, retrieved IDs, scores, and run parameters.
+- **Error analysis:** evidence lost during routing, inaccurate names, mixed topics, factual lookup questions, and multi-hop questions. Define question subtypes before inspecting final results.
 
-## Научный вклад и границы вывода
+## Research contribution and scope
 
-Кластеризация и LLM-организация знаний сами по себе не являются заявкой на новизну: [RAPTOR](https://arxiv.org/abs/2401.18059) уже использует рекурсивные embedding, clustering и summarization для retrieval. Предлагаемый вклад — контролируемая проверка плоской организации с короткими названиями, раздельная оценка её компонентов и компромисса качества со стоимостью.
+Clustering and LLM-based knowledge organization are not, by themselves, claims of novelty: [RAPTOR](https://arxiv.org/abs/2401.18059) already uses recursive embedding, clustering, and summarization for retrieval. The proposed contribution is a controlled evaluation of flat organization with short names, the individual components, and the trade-off between quality and cost.
 
-Один ограниченный корпус позволяет сделать вывод только о выбранном протоколе. Для заявления SotA нужны сопоставимые опубликованные результаты на той же задаче, корпусе, split и метриках; победы над собственными baseline недостаточно.
+A single restricted corpus supports conclusions only about the chosen protocol. A SotA claim requires comparable published results on the same task, corpus, split, and metrics; outperforming only our own baselines is insufficient.

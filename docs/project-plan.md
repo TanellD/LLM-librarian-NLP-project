@@ -1,59 +1,59 @@
-# План проекта и критерии оценивания
+# Project plan and grading criteria
 
-## Основание
+## Basis
 
-План составлен по критериям из задания и локальному шаблону `submission/main.tex`. Overleaf остаётся вне Git; исследовательские решения и материалы для воспроизведения хранятся здесь.
+This plan follows the assignment criteria and the local report template in `submission/main.tex`. Overleaf remains outside Git; research decisions and reproducibility materials are maintained here.
 
-В задании указан максимум **60 баллов**. Перечисленные обязательные компоненты дают **35 баллов**: 2 + 3 + 10 + 10 + 10. Дополнительно указаны до 15 баллов за SotA на своём датасете и до 25 за SotA на задаче с previous art. Не следует автоматически складывать оба бонуса: порядок их применения и общий предел требуют уточнения у преподавателя. План работ не предполагает получение бонуса заранее.
+The assignment states a maximum of **60 points**. The listed required components total **35 points**: 2 + 3 + 10 + 10 + 10. It also lists up to 15 bonus points for SotA on your dataset and up to 25 for SotA on a task with previous art. These bonuses should not automatically be added together: their interaction and the overall cap require clarification from the instructor. The plan does not assume a bonus will be earned.
 
-## Результаты для оценивания
+## Graded deliverables
 
-| Компонент | Баллы из задания | Проверяемые материалы |
+| Component | Assignment points | Evidence to provide |
 | --- | ---: | --- |
-| Отчёт | 2 | Abstract со ссылкой на код; все разделы шаблона; таблицы, ссылки и ограничения |
-| Репозиторий | 3 | README, установка, команды воспроизведения, конфигурации, seed, загрузка данных и таблицы результатов |
-| Related Work | 10 | Сравнение подходов с первичными источниками, их результатами и условиями измерения |
-| Датасет и постановка задачи | 10 | Вход/выход, происхождение и лицензия, preprocessing, split, статистика и разметка |
-| Свой и конкурентные подходы | 10 | Алгоритмы, параметры, общий протокол сравнения, абляции и анализ ошибок |
-| SotA на своём датасете | до 15 | Разметка и сопоставимые сильные методы; одного собственного baseline недостаточно |
-| SotA при наличии previous art | до 25 | Прямое сравнение с опубликованными результатами на одинаковой постановке |
+| Report | 2 | Abstract with a code link; all template sections; tables, references, and limitations |
+| Repository | 3 | README, installation, reproduction commands, configurations, seeds, data download, and result tables |
+| Related Work | 10 | Comparison of approaches using primary sources, their results, and evaluation conditions |
+| Dataset and task definition | 10 | Inputs/outputs, provenance and license, preprocessing, splits, statistics, and annotations |
+| Proposed and competing methods | 10 | Algorithms, parameters, shared evaluation protocol, ablations, and error analysis |
+| SotA on your dataset | up to 15 | Annotations and comparable strong methods; a single in-house baseline is insufficient |
+| SotA with previous art | up to 25 | Direct comparison with published results under the same task definition |
 
-## Структура отчёта по шаблону
+## Report structure from the template
 
-1. **Abstract:** задача, метод, измеренный результат и ссылка на репозиторий.
-2. **Introduction / Team:** мотивация, вклад, состав команды и ответственность участников.
-3. **Related Work:** dense, sparse/hybrid retrieval и организация знаний; отличия от RAPTOR.
-4. **Model Description:** chunking, embedding, clustering, названия, маршрутизация и сложность.
-5. **Dataset:** источник, лицензия, сбор/разметка, статистика и разбиения.
-6. **Experiments / Metrics / Experiment Setup / Baselines:** формулы метрик, модели, параметры, бюджет и seed.
-7. **Results:** таблицы своего и конкурентных методов, интервалы, стоимость, примеры ответов и ошибки.
-8. **Conclusion:** вывод относительно гипотез, ограничения и дальнейшие шаги.
+1. **Abstract:** task, method, measured result, and repository link.
+2. **Introduction / Team:** motivation, contribution, team members, and responsibilities.
+3. **Related Work:** dense, sparse/hybrid retrieval, and knowledge organization; differences from RAPTOR.
+4. **Model Description:** chunking, embedding, clustering, names, routing, and complexity.
+5. **Dataset:** source, license, collection/annotation, statistics, and splits.
+6. **Experiments / Metrics / Experiment Setup / Baselines:** metric definitions, models, parameters, budget, and seeds.
+7. **Results:** tables for the proposed and competing methods, confidence intervals, cost, answer examples, and errors.
+8. **Conclusion:** findings relative to the hypotheses, limitations, and future work.
 
-Шаблон рекомендует английский язык отчёта, но допускает русский.
+English is the primary language of the project and the report. The template recommends English and also permits Russian.
 
-## Этапы и условия завершения
+## Milestones and completion criteria
 
-1. **Постановка:** зафиксировать гипотезы, корпус, бюджет, метрики, split и критерии успеха до тестирования. Расширить Related Work, выписать опубликованные результаты с условиями сравнения.
-2. **Данные:** реализовать загрузку и preprocessing, сохранить манифест с версиями и контрольными суммами; проверить соответствие supporting facts исходным предложениям и блокам.
-3. **Baseline:** воспроизвести dense, BM25 и hybrid; единый формат predictions и результатов оценки.
-4. **Метод:** добавить смысловое разбиение, кластеризацию и LLM-названия; кешировать индексирование и журналировать расходы.
-5. **Эксперименты:** настроить параметры на validation, заморозить конфигурации, выполнить итоговое сравнение и абляции на held-out вопросах.
-6. **Сдача:** перенести проверенные результаты в Overleaf, дополнить README командами воспроизведения и оформить ограничения. Утверждения о качестве должны ссылаться на реальные артефакты запусков.
+1. **Task definition:** fix hypotheses, corpus, budget, metrics, splits, and success criteria before testing. Expand Related Work and record published results with their evaluation conditions.
+2. **Data:** implement download and preprocessing, save a manifest with versions and checksums, and verify mappings from supporting facts to source sentences and chunks.
+3. **Baselines:** reproduce dense, BM25, and hybrid retrieval with a shared format for predictions and evaluation results.
+4. **Method:** add semantic chunking, clustering, and LLM-generated names; cache indexing and log expenses.
+5. **Experiments:** tune parameters on validation data, freeze configurations, and run the final comparison and ablations on held-out questions.
+6. **Submission:** transfer verified results to Overleaf, add reproduction commands to the README, and document limitations. Performance claims must refer to actual run artifacts.
 
-## Планируемые артефакты реализации
+## Planned implementation artifacts
 
-Создавать каталоги по мере появления содержимого; текущая настройка не содержит работающего pipeline.
+Create directories as their contents become available; the current setup does not contain a working pipeline.
 
-| Путь | Содержимое |
+| Path | Contents |
 | --- | --- |
-| `src/` | Подготовка данных, chunking, retrieval, clustering, генерация и оценка |
-| `configs/` | Модели, параметры методов, seed и бюджеты |
-| `scripts/` | Загрузка данных и команды запуска сравнения |
-| `data/` | Локальные данные, исключены из Git |
-| `artifacts/` | Локальные индексы и кеши, исключены из Git |
-| `runs/` | Сырые журналы и предсказания, исключены из Git |
-| `results/` | Компактные таблицы, конфигурации/ID запусков и ссылки на доступные предсказания |
-| `docs/` | Постановка, протокол, Related Work и описание воспроизведения |
-| `submission/` | Локальный отчёт Overleaf, исключён из Git |
+| `src/` | Data preparation, chunking, retrieval, clustering, generation, and evaluation |
+| `configs/` | Models, method parameters, seeds, and budgets |
+| `scripts/` | Data download and comparison commands |
+| `data/` | Local datasets, excluded from Git |
+| `artifacts/` | Local indexes and caches, excluded from Git |
+| `runs/` | Raw logs and predictions, excluded from Git |
+| `results/` | Compact tables, run configurations/IDs, and links to accessible predictions |
+| `docs/` | Task definition, protocol, Related Work, and reproduction instructions |
+| `submission/` | Local Overleaf report, excluded from Git |
 
-Крупные артефакты для воспроизведения публикуются отдельно с версией и контрольной суммой. Секреты API хранятся локально. Состав команды, вычислительный бюджет, модели и окончательный датасет пока не определены.
+Publish large reproducibility artifacts separately with versions and checksums. Keep API secrets local. Team composition, compute budget, models, and the final dataset are not yet defined.

@@ -1,28 +1,30 @@
-# LLM-библиотекарь
+# LLM Librarian
 
-Автоматическая организация документов для повышения эффективности retrieval-augmented generation (RAG).
+Automatic document organization for more effective retrieval-augmented generation (RAG).
 
-Репозиторий: <https://github.com/TanellD/LLM-librarian-NLP-project>
+Repository: <https://github.com/TanellD/LLM-librarian-NLP-project>
 
-Проект проверяет, помогают ли смысловое разбиение документов, кластеризация эмбеддингов и названия кластеров, созданные LLM, находить подтверждающие фрагменты и отвечать на вопросы при ограниченном бюджете.
+The project investigates whether semantic document chunking, embedding-based clustering, and LLM-generated cluster names help retrieve supporting evidence and answer questions under a limited budget.
 
-## Статус
+**Primary language:** English for documentation, the report, code comments, and experiment descriptions.
 
-Подготовлен исследовательский план. Код, зависимости, датасет и экспериментальные результаты пока не добавлены. Преимущество метода и SotA не заявляются.
+## Status
 
-## Документы
+The research plan is ready. Code, dependencies, datasets, and experimental results have not been added yet. No performance improvement or state-of-the-art (SotA) result is claimed.
 
-- [Гипотеза и протокол проверки](docs/hypothesis.md).
-- [План проекта, критерии оценивания и структура отчёта](docs/project-plan.md).
-- [Отправная точка для Related Work](docs/related-work.md).
+## Documentation
 
-## Локальная рабочая копия
+- [Hypotheses and evaluation protocol](docs/hypothesis.md).
+- [Project plan, grading criteria, and report structure](docs/project-plan.md).
+- [Starting points for Related Work](docs/related-work.md).
+
+## Local checkout
 
 ```powershell
 git clone https://github.com/TanellD/LLM-librarian-NLP-project.git
 cd LLM-librarian-NLP-project
 ```
 
-Папка `submission/` содержит локальные файлы Overleaf и целиком исключена через корневой `.gitignore`. При клонировании она не появится: её нужно хранить и синхронизировать отдельно. Исходники шаблона не изменяются при настройке проекта.
+The `submission/` directory contains local Overleaf files and is excluded entirely by the root `.gitignore`. It will not appear when cloning the repository and must be stored and synchronized separately. Repository setup leaves the report template sources unchanged.
 
-Данные, индексы, модели и сырые запуски также исключены из Git. В репозитории должны храниться инструкции загрузки, конфигурации, манифесты выборок и компактные итоговые таблицы с происхождением результатов. Команды установки и воспроизведения будут добавлены вместе с реализацией; сейчас запускать эксперимент нечем.
+Datasets, indexes, models, and raw runs are also excluded from Git. The repository should contain download instructions, configurations, split manifests, and compact result tables with provenance. Installation and reproduction commands will be added with the implementation; no experiment can be run yet.
